@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                          // Biên dịch đến ES6
+    "module": "commonjs",                     // Sử dụng module CommonJS
+    "esModuleInterop": true,                  // Bật tính tương thích với ES modules
+    "outDir": "./dist",                       // Thư mục chứa file biên dịch
+    "rootDir": "./src",                       // Thư mục chứa mã nguồn TypeScript
+    "strict": true,                           // Bật strict mode
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true  // Kiểm tra tính nhất quán trong tên file
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
