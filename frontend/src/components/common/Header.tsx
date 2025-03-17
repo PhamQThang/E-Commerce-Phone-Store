@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { api } from "@/api/axiosConfig";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode";
 import { LogOutIcon } from "lucide-react";
+import { logout } from "@/api/authApi";
 
 interface DecodedToken {
   id: number;
@@ -60,7 +60,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await api.logout();
+      await logout();
       localStorage.removeItem("role");
       localStorage.removeItem("full_name");
       setIsLoggedIn(false);
