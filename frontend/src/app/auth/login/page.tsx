@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { api } from "@/api/axiosConfig";
 import { toast } from "sonner";
+import { login } from "@/api/authApi";
 
 const loginSchema = z.object({
   email: z.string().email("Vui lòng nhập email hợp lệ"),
@@ -46,7 +46,7 @@ export default function LoginPage() {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setError(null);
     try {
-      const response = await api.login(values.email, values.password);
+      const response = await login(values.email, values.password);
       const { role } = response;
 
       if (role) {

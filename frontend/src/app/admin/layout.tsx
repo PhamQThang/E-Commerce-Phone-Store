@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { AppSidebar } from "@/components/admin/Sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { toast } from "sonner";
-import { api } from "@/api/axiosConfig";
 import Header from "@/components/common/Header";
+import { checkAdminAccessAPI } from "@/api/authApi";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const checkAdminAccess = async () => {
       try {
-        const response = await api.checkAdminAccess(); // Gọi API để backend xác thực
+        const response = await checkAdminAccessAPI();
         const { role: verifiedRole } = response;
 
         if (verifiedRole !== "admin") {
@@ -40,13 +40,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           if (err.message === "Không tìm thấy token, vui lòng đăng nhập." || err.message === "Token không hợp lệ, vui lòng đăng nhập lại.") {
             toast.error(err.message, {
               description: "Đang chuyển hướng đến trang đăng nhập...",
-              duration: 3000,
+              duration: 1000,
             });
             router.push("/auth/login");
           } else {
             toast.error(err.message || "Không thể xác thực", {
               description: "Vui lòng thử lại sau...",
-              duration: 3000,
+              duration: 1000,
             });
           }
         }
@@ -62,7 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (!justLoggedIn) {
         toast.error("Bạn cần đăng nhập để truy cập trang này", {
           description: "Đang chuyển hướng đến trang đăng nhập...",
-          duration: 3000,
+          duration: 1000,
         });
       }
       router.push("/auth/login");

@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { api } from "@/api/axiosConfig";
 import { toast } from "sonner";
+import { register } from "@/api/authApi";
 
 const registerSchema = z.object({
   full_name: z.string().min(2, "Tên phải có ít nhất 2 ký tự"),
@@ -46,7 +46,7 @@ export default function RegisterPage() {
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
     setError(null);
     try {
-      const { role } = await api.register(values.full_name, values.email, values.password);
+      const { role } = await register(values.full_name, values.email, values.password);
 
       if (role) {
         localStorage.setItem("role", role);
