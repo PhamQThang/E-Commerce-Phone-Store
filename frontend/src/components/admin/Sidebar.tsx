@@ -1,7 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, ChevronDown, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  ChevronDown,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  Users,
+  Package,
+  Truck,
+  FileText,
+  Shield,
+  RefreshCw,
+  Tag,
+} from "lucide-react";
 import Link from "next/link";
 import {
   Sidebar,
@@ -23,41 +36,9 @@ const items = [
     role: "admin",
   },
   {
-    title: "Quản lý sản phẩm",
-    url: "/admin/products",
-    icon: Search,
-    role: "admin",
-    submenu: [
-      {
-        title: "Tất cả sản phẩm",
-        url: "/admin/products/all",
-      },
-      {
-        title: "Thêm sản phẩm mới",
-        url: "/admin/products/add",
-      },
-    ],
-  },
-  {
-    title: "Quản lý đơn hàng",
-    url: "/admin/orders",
-    icon: Inbox,
-    role: "admin",
-    submenu: [
-      {
-        title: "Đơn hàng chờ xử lý",
-        url: "/admin/orders/pending",
-      },
-      {
-        title: "Đơn hàng đã xử lý",
-        url: "/admin/orders/processed",
-      },
-    ],
-  },
-  {
     title: "Quản lý khách hàng",
     url: "/admin/customers",
-    icon: Calendar,
+    icon: Users,
     role: "admin",
     submenu: [
       {
@@ -87,10 +68,132 @@ const items = [
     ],
   },
   {
-    title: "Khuyến mãi",
-    url: "/admin/promotions",
+    title: "Quản lý danh mục",
+    url: "/admin/categories",
+    icon: Package,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách danh mục",
+        url: "/admin/categories/list",
+      },
+      {
+        title: "Thêm danh mục mới",
+        url: "/admin/categories/add",
+      },
+    ],
+  },
+  {
+    title: "Quản lý nhà cung cấp",
+    url: "/admin/suppliers",
+    icon: Truck,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách nhà cung cấp",
+        url: "/admin/suppliers/list",
+      },
+      {
+        title: "Thêm nhà cung cấp mới",
+        url: "/admin/suppliers/add",
+      },
+    ],
+  },
+  {
+    title: "Quản lý nhập hàng",
+    url: "/admin/imports",
+    icon: Inbox,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách nhập hàng",
+        url: "/admin/imports/list",
+      },
+      {
+        title: "Thêm nhập hàng mới",
+        url: "/admin/imports/add",
+      },
+    ],
+  },
+  {
+    title: "Quản lý sản phẩm",
+    url: "/admin/products",
     icon: Search,
     role: "admin",
+    submenu: [
+      {
+        title: "Tất cả sản phẩm",
+        url: "/admin/products/all",
+      },
+      {
+        title: "Thêm sản phẩm mới",
+        url: "/admin/products/add",
+      },
+    ],
+  },
+  {
+    title: "Quản lý đơn hàng",
+    url: "/admin/orders",
+    icon: FileText,
+    role: "admin",
+    submenu: [
+      {
+        title: "Đơn hàng chờ xử lý",
+        url: "/admin/orders/pending",
+      },
+      {
+        title: "Đơn hàng đã xử lý",
+        url: "/admin/orders/processed",
+      },
+    ],
+  },
+  {
+    title: "Quản lý bảo hành",
+    url: "/admin/warranties",
+    icon: Shield,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách bảo hành",
+        url: "/admin/warranties/list",
+      },
+      {
+        title: "Thêm bảo hành mới",
+        url: "/admin/warranties/add",
+      },
+    ],
+  },
+  {
+    title: "Quản lý đổi trả",
+    url: "/admin/returns",
+    icon: RefreshCw,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách đổi trả",
+        url: "/admin/returns/list",
+      },
+      {
+        title: "Xử lý đổi trả",
+        url: "/admin/returns/process",
+      },
+    ],
+  },
+  {
+    title: "Quản lý khuyến mãi",
+    url: "/admin/promotions",
+    icon: Tag,
+    role: "admin",
+    submenu: [
+      {
+        title: "Danh sách khuyến mãi",
+        url: "/admin/promotions/list",
+      },
+      {
+        title: "Thêm khuyến mãi mới",
+        url: "/admin/promotions/add",
+      },
+    ],
   },
   {
     title: "Cài đặt",
