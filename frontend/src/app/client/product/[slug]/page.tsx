@@ -16,3 +16,5 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 };
 
 export default ProductPage;
+
+

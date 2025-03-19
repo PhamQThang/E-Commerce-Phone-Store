@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Thumbs } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import products from "@/data/products";
 import { ShoppingCart } from "lucide-react";
+import { Table , TableHead, TableHeader, TableRow, TableBody, TableCell} from "../ui/table";
+import { Button } from "../ui/button";
+import ProductReviews from "./ProductReviews";
 
 
 interface ProductDetailProps {
@@ -20,11 +19,19 @@ interface ProductDetailProps {
   rating: number;
   colors: string[];
   storageOptions: string[];
-  description: string;
+  description: {
+    text: string;
+    images: string[];
+  };
+  specifications: {
+    category: string;
+    name: string;
+    value: string;
+  }[];
 }
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, newPrice, oldPrice, rating, colors, storageOptions, description }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, newPrice, oldPrice, rating, colors, storageOptions, description, specifications}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState<string>(colors[0] || "");
   const [selectedStorage, setSelectedStorage] = useState<string>(storageOptions[0] || "");
   const similarProducts = products.filter(
@@ -36,54 +43,47 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
   return (
     <section className="py-12 ">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-6">
-          {/* Ảnh sản phẩm */}
-          <div>
-            <Swiper
-              spaceBetween={10}
-              navigation={true}
-              thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-              modules={[Navigation, Thumbs]}
-              className="rounded-lg overflow-hidden"
-            >
-              {images.map((img, index) => (
-                <SwiperSlide key={index} className="!flex !justify-center items-center">
-                  <Image src={img} alt={title} width={400} height={400} className="object-cover rounded-lg" />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+        <div className="flex flex-col md:flex-row gap-10 p-6">
+          {/* Carousel chính */}
+          <div className="w-full md:w-2/3 flex flex-col gap-4">
+            <Carousel className="w-auto">
+              <CarouselContent style={{ transform: `translateX(-${activeIndex * 100}%)`, transition: "transform 0.3s ease-in-out" }}>
+                {images.map((img, index) => (
+                  <CarouselItem key={index} className="flex justify-center items-center min-w-full">
+                    <Image src={img} alt={title} width={400} height={400} className="object-cover rounded-lg" />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious
+                onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))}
+                className="absolute top-1/2 -translate-y-1/2 left-[10%] bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
+              />
+
+              <CarouselNext
+                onClick={() => setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))}
+                className="absolute top-1/2 -translate-y-1/2 right-[10%] bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
+              />
+
+            </Carousel>
 
             {/* Gallery ảnh nhỏ */}
-            <Swiper
-              onSwiper={setThumbsSwiper}
-              spaceBetween={8}
-              slidesPerView={3}
-              watchSlidesProgress
-              modules={[Thumbs]}
-              className="mt-4 w-[300px]"
-            >
+            <div className="flex mt-4 gap-2 justify-center">
               {images.map((img, index) => (
-                <SwiperSlide key={index} className="!flex !justify-center items-center">
-                  <Image
-                    src={img}
-                    alt={title}
-                    width={80}
-                    height={40}
-                    className="cursor-pointer object-cover rounded-lg border border-gray-300 hover:border-blue-500 transition duration-300 ease-in-out"
-                  />
-                </SwiperSlide>
+                <Button
+                  key={index}
+                  className={`border-2 p-1 rounded-lg transition ${
+                    activeIndex === index ? "border-blue-500" : "bg-white border-gray-300" 
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  <Image src={img} alt={title} width={80} height={40} className=" rounded-lg" />
+                </Button>
               ))}
-            </Swiper>
-
-            <div className="mt-6">
-              <h2 className="font-bold">Thông tin sản phẩm</h2>
-              <p className="text-gray-700 mt-2">{description}</p>
-
             </div>
           </div>
 
           {/* Thông tin sản phẩm */}
-          <div className="flex flex-col gap-10">
+          <div className="w-full md:w-1/3 flex flex-col gap-10">
             <div>
               <p className="text-gray-500">{category}</p>
               <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
@@ -141,60 +141,40 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
               </button>
               <button className="border-2 border-red-600 text-red-600 font-bold py-3 px-6 rounded-lg shadow-md flex flex-col justify-center items-center gap-2 hover:bg-red-100 transition">
                 <ShoppingCart className="text-red-600 text-2xl" /> {/* Icon giỏ hàng */}
-                <span className="text-[10px]">Thêm vào giỏ hàng</span>
+                <span className="text-[10px]">Thêm vào giỏ</span>
               </button>
             </div>
-            <div className="mt-6"></div>
-              <h2 className="font-bold">Thông số kỹ thuật</h2>
-              <p>Kích thước màn hình
-
-6.9 inches
-Công nghệ màn hình
-
-Super Retina XDR OLED
-Camera sau
-
-Camera chính: 48MP, f/1.78, 24mm, 2µm, chống rung quang học dịch chuyển cảm biến thế hệ thứ hai, Focus Pixels 100%
-Telephoto 2x 12MP: 52 mm, ƒ/1.6
-Camera góc siêu rộng: 48MP, 13 mm,ƒ/2.2 và trường ảnh 120°, Hybrid Focus Pixels, ảnh có độ phân giải
-Camera trước
-
-12MP, ƒ/1.9, Tự động lấy nét theo pha Focus Pixels
-Chipset
-
-Apple A18 Pro
-Công nghệ NFC
-
-Có
-Bộ nhớ trong
-
-256 GB
-Thẻ SIM
-
-Sim kép (nano-Sim và e-Sim) - Hỗ trợ 2 e-Sim
-Hệ điều hành
-
-iOS 18
-Độ phân giải màn hình
-
-2868 x 1320 pixels
-Tính năng màn hình
-
-Dynamic Island
-Màn hình Luôn Bật
-Công nghệ ProMotion với tốc độ làm mới thích ứng lên đến 120Hz
-Màn hình HDR
-True Tone
-Dải màu rộng (P3)
-Haptic Touch
-Tỷ lệ tương phản 2.000.000:1
-Loại CPU
-
-CPU 6 lõi mới với 2 lõi hiệu năng và 4 lõi hiệu suất
-Tương thích
-
-Tương Thích Với Thiết Bị Trợ Thính</p>
           </div>
+        </div>
+        <div className="mt-6 flex flex-col sm:flex-row gap-10">
+          <div className="mt-6 w-full sm:w-2/3">
+            <h2 className="font-bold">Thông tin sản phẩm</h2>
+            <p className="text-gray-700 mt-2">{description.text} </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {description.images.map((img, index) => (
+                <img key={index} src={img} alt={`Mô tả ${index}`} width="150" />
+              ))}
+            </div>
+          </div>
+          <div className="mt-6 w-full sm:w-1/3">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead colSpan={3} className="text-center text-black text-2xl font-bold">Thông số kỹ thuật</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {specifications.map((spec, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{spec.name}</TableCell>
+                    <TableCell>{spec.value}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+
+            </Table>
+          </div>
+
         </div>
         {/* Sản phẩm tương tự */}
         {similarProducts.length > 0 && (
@@ -202,7 +182,7 @@ Tương Thích Với Thiết Bị Trợ Thính</p>
             <h2 className="text-2xl font-bold mb-4">Sản phẩm tương tự</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
               {similarProducts.map((product) => (
-                <div key={product.id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
+                <div key={product.id} className="bg-white border rounded-lg p-4 shadow hover:shadow-lg transition">
                   <Image src={product.images[0]} alt={product.title} width={200} height={200} className="object-cover rounded-lg mx-auto" />
                   <h3 className="font-semibold text-center mt-4">{product.title}</h3>
                   <p className="text-center text-red-500 font-bold">{product.newPrice}₫</p>
@@ -211,6 +191,11 @@ Tương Thích Với Thiết Bị Trợ Thính</p>
             </div>
           </div>
         )}
+
+        {/* review */}
+        <div className="mt-12">
+        <ProductReviews />
+        </div>
       </div>
     </section>
   );

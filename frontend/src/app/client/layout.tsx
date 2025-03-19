@@ -1,3 +1,4 @@
+import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 
 export default function ClientLayout({
@@ -9,6 +10,7 @@ export default function ClientLayout({
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main>{children}</main>
+      <Footer />
     </div>
   );
 }

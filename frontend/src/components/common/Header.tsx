@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, ShoppingCart } from "lucide-react";
 import { logout } from "@/api/authApi";
+import Image from "next/image";
 
 interface DecodedToken {
   id: number;
@@ -89,9 +90,13 @@ export default function Header() {
     <header className="bg-white shadow p-4">
       <div className="flex justify-between items-center">
         <Link href={role === "admin" ? "/admin" : "/client"}>
-          <h1 className="text-2xl font-bold">Fixi Mobile</h1>
+          <Image src="/image/logo.png" alt="Fixi Mobile" width={40} height={40} />
         </Link>
         <div className="flex items-center space-x-4">
+        <Link href="/client/cart" className="relative flex items-center gap-2">
+          <ShoppingCart className="text-red-500 text-2xl" />
+          <span>Giỏ hàng</span>
+        </Link>
           {isLoggedIn ? (
             <>
               <div className="flex items-center space-x-2">

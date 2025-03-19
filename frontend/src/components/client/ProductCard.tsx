@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductProps> = ({ id, images, category, title, newP
         </div>
         <p className="text-sm text-gray-500 font-medium mt-2">{category}</p>
         <h3 className="text-lg font-bold mt-1">{title}</h3>
-        <div className="flex gap-2 mt-1">
+        <div className="flex flex-col sm:flex-row gap-2 mt-1">
           <p className="text-red-500 font-bold">{newPrice}₫</p>
           <p className="text-gray-400 line-through">{oldPrice}₫</p>
         </div>
